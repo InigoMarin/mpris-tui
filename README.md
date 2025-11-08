@@ -1,51 +1,51 @@
 # MPRIS TUI
 
-Una aplicación de terminal (TUI) simple escrita en Go para controlar reproductores de medios compatibles con MPRIS en Linux a través de `playerctl`.
+A simple terminal application (TUI) written in Go to control MPRIS-compatible media players on Linux via `playerctl`.
 
-## Características
+## Features
 
-- **Detección automática de reproductores:** Detecta y lista todos los reproductores de medios disponibles al iniciarse.
-- **Selección de reproductor:** Permite seleccionar un reproductor de la lista para controlarlo.
-- **Controles de reproducción:** Ofrece controles básicos como Play/Pause, Stop, Siguiente y Anterior.
-- **Interfaz intuitiva:** Diseñada para ser fácil de usar, incluso en pantallas pequeñas o a través de una conexión SSH desde un dispositivo móvil.
-- **Ligera y rápida:** Al estar escrita en Go, la aplicación es un único binario sin apenas dependencias externas, más allá de `playerctl`.
+- **Automatic Player Detection:** Detects and lists all available media players on startup.
+- **Player Selection:** Allows you to select a player from the list to control it.
+- **Playback Controls:** Offers basic controls like Play/Pause, Stop, Next, and Previous.
+- **Intuitive Interface:** Designed to be easy to use, even on small screens or through an SSH connection from a mobile device.
+- **Lightweight and Fast:** Being written in Go, the application is a single binary with hardly any external dependencies, beyond `playerctl`.
 
-## Requisitos
+## Requirements
 
-- **Go:** Necesario para compilar la aplicación.
-- **playerctl:** Necesario para la detección y el control de los reproductores. Asegúrate de que esté instalado en tu sistema.
+- **Go:** Required to compile the application.
+- **playerctl:** Required for player detection and control. Make sure it is installed on your system.
 
-## Instalación y Uso
+## Installation and Usage
 
-1.  **Clona o descarga el repositorio.**
-2.  **Navega al directorio del proyecto:**
+1.  **Clone or download the repository.**
+2.  **Navigate to the project directory:**
     ```bash
     cd mpris-tui
     ```
-3.  **Ejecuta la aplicación directamente:**
+3.  **Run the application directly:**
     ```bash
     go run .
     ```
-4.  **(Opcional) Compila el binario:**
-    Para crear un archivo ejecutable único, puedes compilar la aplicación:
+4.  **(Optional) Compile the binary:**
+    To create a single executable file, you can compile the application:
     ```bash
     go build .
     ```
-    Esto generará un binario llamado `mpris-tui` que puedes mover a cualquier directorio en tu `$PATH` para un acceso global (por ejemplo, `/usr/local/bin`).
+    This will generate a binary named `mpris-tui` that you can move to any directory in your `$PATH` for global access (e.g., `/usr/local/bin`).
 
-## Controles
+## Controls
 
-### Vista de Selección de Reproductor
+### Player Selection View
 
-- **Flechas arriba/abajo:** Navegar por la lista de reproductores.
-- **Enter:** Seleccionar un reproductor y pasar a la vista de control.
-- **q / Ctrl+c:** Salir de la aplicación.
+- **Up/Down Arrows:** Navigate through the list of players.
+- **Enter:** Select a player and switch to the control view.
+- **q / Ctrl+c:** Exit the application.
 
-### Vista de Control
+### Control View
 
 - **p:** Play / Pause
 - **s:** Stop
-- **n:** Siguiente
-- **v:** Anterior
-- **b:** Volver a la lista de selección de reproductores.
-- **q / Ctrl+c:** Salir de la aplicación.
+- **n:** Next
+- **v:** Previous
+- **b:** Go back to the player selection list.
+- **q / Ctrl+c:** Exit the application.
