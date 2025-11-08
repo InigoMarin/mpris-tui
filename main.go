@@ -100,22 +100,22 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case "p":
 				m.status, _ = executePlayerctlCommand(m.selectedPlayer, "play-pause")
 				m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
-				go sendNotification("mpris-tui", fmt.Sprintf("Player %s: %s", m.selectedPlayer, "Play/Pause"))
+				go sendNotification("mpris-tui", fmt.Sprintf("Player %s: %s\n%s", m.selectedPlayer, "Play/Pause", m.nowPlaying))
 				return m, nil
 			case "s":
 				m.status, _ = executePlayerctlCommand(m.selectedPlayer, "stop")
 				m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
-				go sendNotification("mpris-tui", fmt.Sprintf("Player %s: %s", m.selectedPlayer, "Stop"))
+				go sendNotification("mpris-tui", fmt.Sprintf("Player %s: %s\n%s", m.selectedPlayer, "Stop", m.nowPlaying))
 				return m, nil
 			case "n":
 				m.status, _ = executePlayerctlCommand(m.selectedPlayer, "next")
 				m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
-				go sendNotification("mpris-tui", fmt.Sprintf("Player %s: %s", m.selectedPlayer, "Next"))
+				go sendNotification("mpris-tui", fmt.Sprintf("Player %s: %s\n%s", m.selectedPlayer, "Next", m.nowPlaying))
 				return m, nil
 			case "v": // previous
 				m.status, _ = executePlayerctlCommand(m.selectedPlayer, "previous")
 				m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
-				go sendNotification("mpris-tui", fmt.Sprintf("Player %s: %s", m.selectedPlayer, "Previous"))
+				go sendNotification("mpris-tui", fmt.Sprintf("Player %s: %s\n%s", m.selectedPlayer, "Previous", m.nowPlaying))
 				return m, nil
 			}
 		} else {
