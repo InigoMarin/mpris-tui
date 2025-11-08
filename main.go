@@ -10,12 +10,21 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"time"
 )
 
 var (
-	appStyle = lipgloss.NewStyle().Padding(1, 2)
+	appStyle  = lipgloss.NewStyle().Padding(1, 2)
 	helpStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("241")).Render
 )
+
+type tickMsg time.Time
+
+func tick() tea.Cmd {
+	return tea.Tick(time.Second, func(t time.Time) tea.Msg {
+		return tickMsg(t)
+	})
+}
 
 type model struct {
 	playerList     list.Model
@@ -71,6 +80,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		h, v := appStyle.GetFrameSize()
 		m.playerList.SetSize(msg.Width-h, msg.Height-v)
 
+	case tickMsg:
+		if m.chosen {
+			m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
+			m.status, _ = executePlayerctlCommand(m.selectedPlayer, "status")
+			return m, tick()
+		}
+		return m, nil
+
 	case tea.KeyMsg:
 		if m.chosen {
 			// Control View
@@ -110,7 +127,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.status, _ = executePlayerctlCommand(m.selectedPlayer, "status")
 					m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
 				}
-				return m, nil
+				return m, tick()
 			}
 		}
 	}
