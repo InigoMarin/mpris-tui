@@ -100,18 +100,22 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case "p":
 				m.status, _ = executePlayerctlCommand(m.selectedPlayer, "play-pause")
 				m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
+				go sendNotification("mpris-tui", fmt.Sprintf("Player %s: %s", m.selectedPlayer, "Play/Pause"))
 				return m, nil
 			case "s":
 				m.status, _ = executePlayerctlCommand(m.selectedPlayer, "stop")
 				m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
+				go sendNotification("mpris-tui", fmt.Sprintf("Player %s: %s", m.selectedPlayer, "Stop"))
 				return m, nil
 			case "n":
 				m.status, _ = executePlayerctlCommand(m.selectedPlayer, "next")
 				m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
+				go sendNotification("mpris-tui", fmt.Sprintf("Player %s: %s", m.selectedPlayer, "Next"))
 				return m, nil
 			case "v": // previous
 				m.status, _ = executePlayerctlCommand(m.selectedPlayer, "previous")
 				m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
+				go sendNotification("mpris-tui", fmt.Sprintf("Player %s: %s", m.selectedPlayer, "Previous"))
 				return m, nil
 			}
 		} else {
@@ -198,4 +202,8 @@ func getNowPlaying(player string) (string, error) {
 		return "No media playing", err
 	}
 	return strings.TrimSpace(string(out)), nil
+}
+
+func sendNotification(summary, body string) {
+	exec.Command("notify-send", summary, body).Run()
 }
