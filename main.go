@@ -21,6 +21,7 @@ type model struct {
 	playerList     list.Model
 	selectedPlayer string
 	status         string
+	nowPlaying     string
 	chosen         bool
 }
 
@@ -81,15 +82,19 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			case "p":
 				m.status, _ = executePlayerctlCommand(m.selectedPlayer, "play-pause")
+				m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
 				return m, nil
 			case "s":
 				m.status, _ = executePlayerctlCommand(m.selectedPlayer, "stop")
+				m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
 				return m, nil
 			case "n":
 				m.status, _ = executePlayerctlCommand(m.selectedPlayer, "next")
+				m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
 				return m, nil
 			case "v": // previous
 				m.status, _ = executePlayerctlCommand(m.selectedPlayer, "previous")
+				m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
 				return m, nil
 			}
 		} else {
@@ -103,6 +108,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.selectedPlayer = selectedItem.title
 					m.chosen = true
 					m.status, _ = executePlayerctlCommand(m.selectedPlayer, "status")
+					m.nowPlaying, _ = getNowPlaying(m.selectedPlayer)
 				}
 				return m, nil
 			}
@@ -118,9 +124,10 @@ func (m model) View() string {
 	if m.chosen {
 		// Control View
 		return appStyle.Render(fmt.Sprintf(
-			"Controlling: %s\nStatus: %s\n\n[p] Play/Pause\n[s] Stop\n[n] Next\n[v] Previous\n\n%s",
+			"Controlling: %s\nStatus: %s\nNow Playing: %s\n\n[p] Play/Pause\n[s] Stop\n[n] Next\n[v] Previous\n\n%s",
 			m.selectedPlayer,
 			m.status,
+			m.nowPlaying,
 			helpStyle("Press 'b' to go back to the player list. Press 'q' to quit."),
 		))
 	}
@@ -164,4 +171,14 @@ func executePlayerctlCommand(player, command string) (string, error) {
 		return "Status unavailable", statusErr
 	}
 	return strings.TrimSpace(string(statusOut)), nil
+}
+
+func getNowPlaying(player string) (string, error) {
+	cmd := exec.Command("playerctl", "-p", player, "metadata", "--format", "{{artist}} - {{title}}")
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		// If there's an error (e.g., no metadata), return an empty string
+		return "No media playing", err
+	}
+	return strings.TrimSpace(string(out)), nil
 }
