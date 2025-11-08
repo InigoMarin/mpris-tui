@@ -33,6 +33,15 @@ A simple terminal application (TUI) written in Go to control MPRIS-compatible me
     ```
     This will generate a binary named `mpris-tui` that you can move to any directory in your `$PATH` for global access (e.g., `/usr/local/bin`).
 
+## Makefile Usage
+
+This project includes a `Makefile` to simplify common tasks.
+
+- **`make build`**: Compiles the application and creates the `mpris-tui` binary.
+- **`make install`**: Compiles the application and installs the binary to `/usr/local/bin`. This may require `sudo`.
+- **`make clean`**: Removes the compiled binary.
+- **`make uninstall`**: Removes the installed binary from `/usr/local/bin`. This may require `sudo`.
+
 ## Controls
 
 ### Player Selection View
